@@ -1,7 +1,6 @@
 *Analisis Econometrico 
 * 10/08/2021 
 use "C:\Users\Familia Fonseca\Documents\GitHub\Analisis-Econometrico\Bases de datos\states.dta"
-
 * base de datos 
 sysuse states
 summarize
@@ -19,7 +18,10 @@ xi: regress csat expense percent income high college i.region
 eststo model3
 esttab, r2 ar2 se scalar(rmse)
 pwcorr csat expense percent income high college, star(0.05) sig
-graph matrix csat expense percent income high college, half maxis(ylabel(none) xlabel(n > one))
+
+graph matrix csat expense percent income high college, half maxis(ylabel(none) xlabel(none))
+
+
 scatter csat percent
 scatter csat high
 generate percent2 = percent^2
