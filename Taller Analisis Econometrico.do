@@ -32,8 +32,6 @@ pac  Noruega1 ,name (pgac)
 graph combine gac pgac
 
 
-
-
 *AC -> Orden de los MA(3)
 *PAC -> Orden de los AR(1)
 
