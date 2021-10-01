@@ -12,21 +12,24 @@ install.packages("timsac")
 library("timsac")
 library(nortest)
 
-Taller<- read_excel("GitHub/Analisis-Econometrico/Bases de datos/Taller Primer corte.xlsx", 
-                                  sheet = "Taller1")
+library(readxl)
+España <- read_excel("GitHub/Analisis-Econometrico/Bases de datos/Base de datos VaR.xlsx", 
+                                sheet = "DatosAbella", col_types = c("numeric", 
+                                                                     "numeric", "numeric"))
+View(España)
 
-Fecha<- ts(Taller$Fecha, start = c(1971), frequency = 1)
-España<- ts(Taller$España, start = c(1971), frequency = 1)
-summary()
+
+Fecha<- ts(España$Fecha, start = c(1971), frequency = 1)
+
+summary(España)
+
 attach(Taller)
 
 jb.norm.test(Taller$España, nrepl=2000)
 
 
-
-
 # Grafico de datos en niveles
-ts.plot(Taller$España,col="red")
+ts.plot(España$gasto,col="red")
 
 plot(decompose(España),col="red")
 decomp(España, trade=TRUE,plot=TRUE,)
