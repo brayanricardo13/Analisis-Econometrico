@@ -1,0 +1,7 @@
+*Analisis Econometrico
+import excel "C:\Users\Familia Fonseca\Documents\GitHub\Analisis-Econometrico\Bases de datos\Base de datos clase 05.10.2021.xlsx", sheet("Hoja1") firstrow
+*Declaramos la serie com una serie de tiempo 
+tsset FECHA
+tsline EFECTIVO
+
+
