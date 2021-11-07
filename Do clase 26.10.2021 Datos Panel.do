@@ -1,12 +1,11 @@
 * 26/10/2021 Analisis de datos 
-
 import excel "C:\Users\Familia Fonseca\Documents\GitHub\Analisis-Econometrico\Bases de datos\Base de datos AL PANEL.xlsx", sheet("Hoja1") firstrow
-sum 
-#Usamos el comando xtset para declarar la base de datos como datos panel
+summ 
+*Usamos el comando xtset para declarar la base de datos como datos panel
 xtset country year
-#Podemos ver las tendencias de las series por separado
+*Podemos ver las tendencias de las series por separado
 xtline rgdpna
-#y también en una sola gráfica
+*y también en una sola gráfica
 xtline rgdpna, overlay
 bysort country: egen ymean=mean(rgdpna)
 twoway scatter rgdpna country, msymbol(circle_hollow) || connected ymean country, msymbol(diamond) || , xlabel(1 "1" 2 "2" 3 "3" 4 "4" 5 "5" 6 "6" 7 "7" 8 "8" 9 "9")
