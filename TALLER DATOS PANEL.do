@@ -1,58 +1,58 @@
 *TALLER ANALISIS ECONOMETRICO 
 import excel "C:\Users\Familia Fonseca\Documents\GitHub\Analisis-Econometrico\Bases de datos\Base de datos AL PANEL.xlsx", sheet("Taller ") firstrow
-summ
+sum,d 
 *declarar la base como datos panel 
-xtset N_Pais Fecha
+xtset Descripcion Año
 *Podemos ver las tendencias de las series por separado
 xtline Consumo
-bysort N_Pais: egen ymean=mean(Pib)
+bysort Descripcion : egen ymean=mean(PIB)
 *heterogenidad
-twoway scatter Pib N_Pais, msymbol(circle_hollow) || connected ymean N_Pais,  || , xlabel(1 "1" 2 "2" 3 "3" 4 "4" 5 "5")
+twoway scatter PIB Descripcion, msymbol(circle_hollow) || connected ymean Descripcion  || , xlabel(1 "1" 2 "2" 3 "3" 4 "4" 5 "5")
 * Evolucion año por año 
-bysort Fecha: egen ymean1=mean(Pib)
-twoway scatter Pib Fecha, msymbol(circle_hollow) || connected ymean1 Fecha, msymbol(diamond) || , xlabel(2015(1)2019)
+bysort Año: egen ymean1=mean(PIB)
+twoway scatter PIB Año, msymbol(circle_hollow) || connected ymean1 Año, msymbol(diamond) || , xlabel(2015(1)2019)
 *regresion  
-reg Pib Consumo
+reg PIB Consumo
 twoway scatter Pib Consumo, mlabel(N_Pais) || lfit Pib Consumo,clstyle(p2) 
 *comparacion 
-xi: reg Pib Consumo i.N_Pais
+xi: reg PIB Consumo i.Descripcion
 predict yhat
 *regresion ajustada 
-separate Pib1, by(N_Pais)
-separate yhat1, by(N_Pais)
-twoway connected yhat1-yhat5 Consumo, msymbol(none diamond_hollow triangle_hollow square_hollow + circle_hollow x) msize(medium) mcolor(black black black black black black ) || lfit Pib Consumo, clwidth(thick) clcolor(black)
+separate Pib1, by(Descripcion)
+separate yhat1, by(Descripcion)
+twoway connected yhat1-yhat5 Consumo, msymbol(none diamond_hollow triangle_hollow square_hollow + circle_hollow x) msize(medium) mcolor(black black black black black black ) || lfit PIB Consumo, clwidth(thick) clcolor(black)
 * guardar la regresion 
-reg Pib Consumo
+reg PIB Consumo
 estimates store ols
 *regresion cmpleja 
-xi: reg Pib Consumo i.N_Pais
+xi: reg PIB Consumo i.Descripcion
 estimates store ols_dum
 estimates table ols ols_dum, star stats (N)
 
 
 *estimacion Efectos fijos 
-xtreg Pib Consumo , fe 
+xtreg PIB Consumo , fe 
 *Corrigiendo hetedogenidad 
-xtreg Pib Consumo  , fe  robust
-xtreg Pib Consumo Inversion Gasto, fe  robust
+xtreg PIB Consumo  , fe  robust
+xtreg PIB Consumo Inversion Gasto, fe  robust
 
 
 *comparando tres modelos efectos fijos 
-xtreg  Pib Consumo,fe
+xtreg  PIB Consumo,fe
 estimates store ols_11
-xtreg Pib Consumo Inversion,fe
+xtreg PIB Consumo Inversion,fe
 estimates store ols_12
-xtreg  Pib Consumo Inversion Gasto ,fe 
+xtreg  PIB Consumo Inversion Gasto ,fe 
 estimates store ols_13
 estimates table ols_11 ols_12 ols_13 , star stats (N r2 r2_a)
 
 *estimacion Efecto aleatorios 
 
-xtreg  Pib Consumo,re
+xtreg  PIB Consumo,re
 estimates store ols_21
-xtreg Pib Consumo Inversion,re
+xtreg PIB Consumo Stock_Inversion,re
 estimates store ols_22
-xtreg  Pib Consumo Inversion Gasto ,re 
+xtreg  PIB Consumo Stock_Inversion Gasto ,re 
 estimates store ols_23
 estimates table ols_21 ols_22 ols_23 , star stats (N r2 r2_a)
 
