@@ -18,8 +18,8 @@ twoway scatter Pib Consumo, mlabel(N_Pais) || lfit Pib Consumo,clstyle(p2)
 xi: reg PIB Consumo i.Descripcion
 predict yhat
 *regresion ajustada 
-separate Pib1, by(Descripcion)
-separate yhat1, by(Descripcion)
+separate PIB, by(Descripcion)
+separate yhat, by(Descripcion)
 twoway connected yhat1-yhat5 Consumo, msymbol(none diamond_hollow triangle_hollow square_hollow + circle_hollow x) msize(medium) mcolor(black black black black black black ) || lfit PIB Consumo, clwidth(thick) clcolor(black)
 * guardar la regresion 
 reg PIB Consumo
@@ -37,16 +37,29 @@ xtreg PIB Consumo  , fe  robust
 xtreg PIB Consumo Inversion Gasto, fe  robust
 
 
+*PRIMERA ESTIMACION 
+reg PIB Consumo
+estimates store ols
+reg PIB Consumo Stock_Inversion
+estimates store ols_1
+reg PIB Consumo Stock_Inversion Gasto
+estimates store ols_2
+
+estimates table ols ols_1 ols_2, star stats (N N r2 r2_a)
+
+
+
 *comparando tres modelos efectos fijos 
 xtreg  PIB Consumo,fe
 estimates store ols_11
-xtreg PIB Consumo Inversion,fe
+xtreg PIB Consumo Stock_Inversion,fe
 estimates store ols_12
-xtreg  PIB Consumo Inversion Gasto ,fe 
+xtreg  PIB Consumo Stock_Inversion Gasto ,fe 
 estimates store ols_13
 estimates table ols_11 ols_12 ols_13 , star stats (N r2 r2_a)
 
 *estimacion Efecto aleatorios 
+
 
 xtreg  PIB Consumo,re
 estimates store ols_21
