@@ -10,18 +10,23 @@ install.packages("gplots")
 library(gplots)
 
 # Parcial Finanzas computacionales 
-
-AAPL<- get.hist.quote(instrument = "AAPL", 
-                      start=as.Date("2020-03-23"), 
-                      end=as.Date("2022-02-25"), quote = "AdjClose")
+APL<- get.hist.quote(instrument = "AAPL", 
+                     start=as.Date("2020-03-23"), 
+                     end=as.Date("2022-02-25"), quote = "AdjClose")
 JPM<- get.hist.quote(instrument = "JPM", 
                      start=as.Date("2020-03-23"), 
                      end=as.Date("2022-02-25"), quote = "AdjClose")
-plot(JPM)
-plot(AAPL)
+FB<- get.hist.quote(instrument = "FB", 
+                     start=as.Date("2020-03-23"), 
+                     end=as.Date("2022-02-25"), quote = "AdjClose")
+
+
+
+plot(JPM,col="red", main ="JP MORGAN")
+plot(AAPL,main ="APPLE")
 
 # Portafolio
-CarteraInv <- merge(AAPL,JPM, all = FALSE) 
+CarteraInv <- merge(AAPL,JPM,FB, all = FALSE) 
 names(CarteraInv)
 
 
@@ -41,43 +46,32 @@ Cov
 corr <- cor(Rendimientos) * 100
 corr
 
+# correlaciones 
+generate_heat_map <- function(correlationMatrix, title)
+{
+   heatmap.2(x = correlationMatrix,    
+            cellnote = correlationMatrix,   
+            main = title,           
+            symm = TRUE,            
+            dendrogram="none",      
+            Rowv = FALSE,           
+            trace="none",           
+            density.info="none",        
+            notecol="black")          
+}
+corr1 <- round(cor(Rendimientos) * 100, 2)
+generate_heat_map(corr1,"Mapa de calor: Correlaciones")
+
 
 markov<-portfolioSpec()
 
 setRiskFreeRate(markov)<- -0.001 #Tasa libre de riesgo
 setNFrontierPoints(markov) <- 20 #Cantidad de carteras en frontera
-
 constraints="LongOnly"
+
 
 Frontera <- portfolioFrontier(as.timeSeries(Rendimientos),spec=markov,constraints )
 Frontera
-
-
-frontierPlot(Frontera)
-grid()
-tangencyPoints(Frontera, pch = 19, col = "red", cex=2)
-tangencyLines(Frontera, col="grey", pch=19, cex=2)
-minvariancePoints(Frontera, col="blue", pch=19, cex=2)
-monteCarloPoints(Frontera, mCsteps=2000, col="#0098D5", cex=0.001)
-
-
-col <- qualiPalette(ncol(Rendimientos), "Pastel1")
-weightsPlot(Frontera, col=col)
-
-
-
-efPortfolio <- efficientPortfolio(as.timeSeries(Rendimientos),markov,constraints)
-efPortfolio
-
-
-weightsPie(efPortfolio, col=col )
-mtext(text = "Portafolio eficiente", side = 3, line = 1.5,
-      font = 2, cex = 0.7, adj = 0)
-
-
-
-
-
 
 
 
