@@ -26,7 +26,7 @@ names(CarteraInv)
 
 
 plot(CarteraInv, main=" ", col="deepskyblue", xlab="Fecha")
-title(main="Histórico de Cartera")
+title(main="HistÃ³rico de Cartera")
 
 Rendimientos<-diff(log(CarteraInv))
 head(Rendimientos,10)
