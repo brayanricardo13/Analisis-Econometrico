@@ -1,6 +1,6 @@
 library(tidyverse)
 library(sf)
-library(osmdata)
+
 
 # Define bbox of the plot
 bog_bbox <- st_bbox(c(xmin = -74.243302, xmax = -74.019593, 
